@@ -1,0 +1,32 @@
+import java.util.*;
+import java.io.*;
+
+public class CheckIfPalindrome {
+
+    public static void main(String[] args) throws IOException{
+
+        Scanner in = new Scanner(System.in);
+        System.out.print("Please input a phrase: ");
+        String s = in.nextLine();
+        System.out.println(isPalindrome(s));
+
+    }
+
+    public static boolean isPalindrome(String s1){
+
+        s1 = s1.toLowerCase(); // uniformity
+
+        StringBuilder s = new StringBuilder();
+        for(int j = 0; j<s1.length(); j++) {
+            if(s1.charAt(j) >= 97 && s1.charAt(j) <= 122){ // check if it is only a letter
+                s.append(s1.charAt(j)); //append to stringbuilder if it is
+            }
+        }
+
+        for(int j = 0; j<s.length()/2; j++){
+            if(s.charAt(j) != s.charAt(s.length()-j-1)) return false;
+        }
+        return true;
+    }
+
+}
