@@ -1,0 +1,156 @@
+import java.util.*;
+
+public class Maze {
+    private char mat[][];			// 2d character array that stores the maze display
+    private Coord currentMove;		// object that stores current maze position
+    private Stack visitStack;		// stack that stores location that have been visited
+
+    private boolean ret;
+
+    public Maze(int seed){
+        // constructor which generates the random maze, random starting location
+        // and initializes Maze class values.  If the random value equals 0 the maze
+        // store an 'X' otherwise it store an 'O' in the maze.
+        Random random = new Random(seed);
+        int startRow, startCol;
+        mat = new char[12][12];
+        for (int r = 0; r < 12; r++)
+            for (int c = 0; c < 12; c++)
+            {
+                if (r == 0 || c == 0 || r == 11 || c == 11)
+                    mat[r][c] = 'X';
+                else
+                {
+                    int rndInt = random.nextInt(2);
+                    if (rndInt == 0)
+                        mat[r][c] = 'X';
+                    else
+                        mat[r][c] = 'O';
+                }
+            }
+        mat[0][0] = 'O';
+        startRow = random.nextInt(12);
+        startCol = 11;
+        mat[startRow][startCol] = '.';
+        visitStack = new Stack();
+        currentMove = new Coord(startRow,startCol);
+        visitStack.push(currentMove);
+        ret = false;
+    }
+
+
+    void displayMaze(){
+        // displays the current maze configuration
+        System.out.println("\nRANDOM MAZE DISPLAY\n");
+        for (int r = 0; r < 12; r++)
+        {
+            for (int c = 0; c < 12; c++)
+                System.out.print(mat[r][c] + "  ");
+            System.out.println();
+        }
+        System.out.println();
+        pause();
+    }
+
+
+    public void solveMaze(){
+        // This methods solves the maze with private helper method <getMove>.
+        // A loop is needed to repeat getting new moves until either a maze solution
+        // is found or it is determined that there is no way out off the maze.
+        System.out.println("\n>>>>>   WORKING  ....  SOLVING MAZE   <<<<<\n");
+
+        while(!visitStack.isEmpty()){
+            Coord temp = (Coord) visitStack.peek();
+            currentMove = temp;
+
+            if(!getMove()) {
+                visitStack.pop();
+            }
+            if(mat[0][0] == '.') ret = true;
+        }
+
+
+    }
+
+
+    public void mazeSolution(){
+        // Short method to display the result of the maze solution
+        if (ret)
+            System.out.println("\nTHE MAZE HAS A SOLUTION.\n");
+        else
+            System.out.println("\nTHE MAZE HAS NO SOLUTION.\n");
+    }
+
+
+    private boolean inBounds(int r, int c){
+        // This method determines if a coordinate position is inbounds or not
+        if(r >= 12 || r < 0 || c < 0 || c >= 12) return false;
+        return true;
+    }
+
+
+    private boolean getMove() {
+        // This method checks eight possible positions in a counter-clock wise manner
+        // starting with the (-1,0) position.  If a position is found the method returns
+        // true and the currentMove coordinates are altered to the new position
+
+        boolean t = false;
+        int j = -1; int i = 0;
+        int x = currentMove.getrPos();
+        int y = currentMove.getcPos();
+
+        if(inBounds(x+j,y+i) && mat[x+j][y+i] == 'O'){
+            currentMove = new Coord(x+j, y+i);
+            visitStack.push(currentMove);
+            mat[x+j][y+i] = '.';
+            t = true;
+        }
+        i++;
+        for(int k = 0; k<2; k++){
+            if(inBounds(x+j,y+i) && mat[x+j][y+i] == 'O'){
+                currentMove = new Coord(x+j, y+i);
+                visitStack.push(currentMove);
+                mat[x+j][y+i] = '.';
+                t = true;
+            }
+            j++;
+        }
+        for(int k = 0; k<2; k++){
+            if(inBounds(x+j,y+i) && mat[x+j][y+i] == 'O'){
+                currentMove = new Coord(x+j, y+i);
+                visitStack.push(currentMove);
+                mat[x+j][y+i] = '.';
+                t = true;
+            }
+            i--;
+        }
+        for(int k = 0; k<2; k++){
+            if(inBounds(x+j,y+i) && mat[x+j][y+i] == 'O'){
+                currentMove = new Coord(x+j, y+i);
+                visitStack.push(currentMove);
+                mat[x+j][y+i] = '.';
+                t = true;
+            }
+            j--;
+        }
+        if(inBounds(x+j,y+i) && mat[x+j][y+i] == 'O'){
+            currentMove = new Coord(x+j, y+i);
+            visitStack.push(currentMove);
+            mat[x+j][y+i] = '.';
+            t = true;
+        }
+
+        return t;
+    }
+
+    /** This method checks if the coordinate position is an open path */
+
+    private void pause() {
+        Scanner input = new Scanner(System.in);
+        String dummy;
+        System.out.print("\nPress <Enter> to continue  ===>>  ");
+        dummy = input.nextLine();
+    }
+
+
+}
