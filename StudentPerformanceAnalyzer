@@ -1,0 +1,205 @@
+/*
+    USE COMMENTS FOR FUNCTIONALITY OF CODE
+ */
+import java.util.*;
+import java.io.*;
+
+public class StudentPerformanceAnalyzer{
+
+    public static void main(String[] args) throws IOException{
+
+        Scanner in = new Scanner(System.in);
+
+        StudentPerformanceAnalyzer s = new StudentPerformanceAnalyzer();
+        s.populateData();
+        System.out.print("Please put in subjectIndex for average grade (0-4): ");
+        int x = in.nextInt();
+        System.out.print("The average grade in " + s.getSubject(x) + " is ");
+        System.out.printf("%.2f",  s.calculateAverage(x));
+        System.out.println();
+        System.out.print("The average grade across all classes is ");
+        System.out.printf("%.2f", s.calculateOverallAverage());
+        System.out.println();
+        System.out.println("The best-performing student in Computer Science is Student " + s.getBestStudent(3));
+        s.displayStudentPerformance(s.getBestStudent(3));
+        System.out.println("The Interquartile Range is: " + s.getInterquartileRange(x));
+
+        System.out.print("For a graph of all students in a subject and semester, please first input subject index: ");
+        int y = in.nextInt();
+        System.out.println(s.getSubject(y) + "!");
+
+        System.out.print("Please input the semester you would like to know about: ");
+        int z = in.nextInt();
+        s.displayGraph(y, z);
+
+    }
+
+
+}
+
+class StudentPerformanceAnalyzer{
+
+    int[][][] grades; // row demonstrates grade, column is subject, and depth is semester
+    String[] subjects;
+    StudentPerformanceAnalyzer(){
+        grades = new int[101][5][4]; // initializes grades array, students=rows, subject indexes=columns, semesters=depth
+        subjects = new String[] //used to retrieve subject from subject index
+                {"African American History", "Human Anatomy", "Physics", "Computer Science", "Gender Studies"};
+    }
+
+    // returns the subject depending on an inputted subject index, used to print out specific subject depending on
+    // user's input
+    public String getSubject(int x){
+        return subjects[x];
+    }
+
+    // Used to fill up the 3D array with random performance data for students, subjects, and semesters
+    public void populateData(){
+
+        Random rnd = new Random(); // used to randomize data
+        for(int j = 0; j<101; j++){ // iterate through total students
+            for(int i = 0; i<5; i++){ // iterate through total subjects
+                for(int k = 0; k<4; k++){ // iterate through total semesters
+                    int gr = rnd.nextInt(101); // random numerical grade from 0 to 100
+                    grades[j][i][k] = gr; // grade is given to this student for this subject
+                                          // in this semester
+                }
+            }
+        }
+
+
+
+    }
+
+    public double calculateAverage(int subjectIndex){ // fixed subject index, iterate through all students and semesters
+
+        double avg = 0; // store average value to be returned
+
+        //nested for loop
+        for(int j = 0; j<101; j++){ //iterate through students
+            for(int i = 0; i<4; i++){ // iterate through semesters
+                avg+= grades[j][subjectIndex][i]; // increase average by grade of student j in semester i in
+                                                  // certain subject, covers all grades in the column of a
+                                                  // specific subject
+            }
+        }
+
+        return avg/(grades.length*grades[0][0].length); // divide average by total number of added entries
+    }
+
+    //method that takes all grades of every student in every subject of every semester and averages out
+    public double calculateOverallAverage(){
+        // store average value and returns it
+        double avg = 0;
+
+        // nested for loops
+        for(int j = 0; j<101; j++){ // iterate through all students
+            for(int i = 0; i<5; i++){ // iterate through all subjects
+                for(int k = 0; k<4; k++){ // iterate through all semesters
+                    avg += grades[j][i][k]; // increase avg variable by grade of student j in subject i during
+                                            // semester k, covers all grades in 3D matrix
+                }
+            }
+        }
+        return avg/(grades.length*grades[0].length*grades[0][0].length); // divide total grades by number of
+                                                                         // number of all entries
+    }
+
+    // return index of the best-performing student across all semesters
+    public int getBestStudent(int subjectIndex){ // uses subjectIndex to find out highest grade across semester
+
+        int total = 0; // temporary variable that stores greatest grade across semesters
+        int ind = 0; // stores the index of student with the highest performance in subject
+        for(int j = 0; j<101; j++){ // iterate through all students
+                int temp= 0; // temporarily stores the total sum of all grades
+                               // no need to calculate average, as greatest sum of grades across semesters
+                               // is essentially the same as
+                               // having the best performance and having highest average
+                for(int k = 0; k<4; k++){
+                    temp += grades[j][subjectIndex][k];
+                }
+                if(temp > total){ // compare current student's total with previous high, if curr is greater
+                                  // pass through if statement
+                    ind = j;      // change ind to current ind
+                    total = temp; // change total value that stores greatest grade to curr total
+
+            }
+        }
+
+        return ind; // return index of highest performing student
+    }
+
+    // method that prints out a specific student's performance in all subjects in all semesters
+    public void displayStudentPerformance(int studentIndex){ // inputs student index
+
+        System.out.println("\n");
+        System.out.println("Student " + studentIndex); // display student index
+        System.out.println();
+
+        for(int i = 0; i<5; i++) {
+            System.out.println(subjects[i]);
+            for(int k = 0; k<4; k++){
+                System.out.println("Semester " + (k+1) + ": "+ grades[studentIndex][i][k] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public double getInterquartileRange(int subjectIndex){
+
+        //find median
+        int[] scores = new int[grades.length];
+
+        for(int j = 0; j<grades.length; j++){
+            for(int k = 0; k<grades[0][0].length; k++){
+                scores[j] = grades[j][subjectIndex][k];
+            }
+        }
+        Arrays.sort(scores);
+
+        int q1 = scores[scores.length/4 + 1];
+        int q3 = scores[3 * scores.length/4 + 1];
+
+        return q3-q1;
+    }
+
+    public void displayGraph(int subjectIndex, int semester){
+
+        int[] scores = new int[101];
+        semester --;
+        int greatestNum = 0;
+        for(int j = 0; j<grades.length; j++){
+            scores[grades[j][subjectIndex][semester]]++;
+            if(scores[grades[j][subjectIndex][semester]] > greatestNum)
+                greatestNum = scores[grades[j][subjectIndex][semester]];
+        }
+        String nums = "";
+        for(int j = 0; j<scores.length; j++){
+            nums += j + " ";
+        }
+        System.out.println(nums);
+
+        for(int i = 0; i<greatestNum; i++){
+            String output = "";
+
+            for(int j = 0; j<scores.length; j++){
+                if(j > 10){
+                    output += " ";
+                }
+                if(scores[j] > 0){
+                    output += "+ ";
+                    scores[j]--;
+                }
+                else
+                    output += "  ";
+            }
+            System.out.println(output);
+        }
+
+
+
+    }
+
+
+}
+
