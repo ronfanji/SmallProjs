@@ -1,0 +1,95 @@
+class Part implements Comparable<Part> {
+    private String make, mode, rest;
+    private int year;
+
+    public Part(String line) {
+        String[] list = line.split(" ");
+
+        rest = "";
+        int x = 0;
+        while((int)list[x].charAt(0) < 48 || (int) list[x].charAt(0) > 57){
+            rest += list[x] + " ";
+            x++;
+        }
+        rest += list[x];
+
+        make = list[x+1];
+        mode = list[x+2];
+        year = Integer.parseInt(list[x+3]);
+
+    }
+
+    //have to have compareTo if implements Comparable
+    public int compareTo(Part rhs) {
+
+        if(!make.equals(rhs.make)) {
+            return make.compareTo(rhs.make);
+        }
+        else{
+            if(!mode.equals(rhs.mode))
+                return mode.compareTo(rhs.mode);
+            else{
+                if(!(year == rhs.year))
+                    return (year > rhs.year) ? 1 : -1;
+                else
+                    return rest.compareTo(rhs.rest);
+            }
+        }
+
+    }
+
+    public String toString() {
+        return make + " " + mode + " " + year + "  " + rest;
+    }
+}
+class PartList {
+    private TreeMap<Part, Integer> partsMap;
+
+    public PartList() {
+        partsMap = new TreeMap<Part, Integer>();
+
+    }
+
+    public PartList(String fileName) {
+        this();
+        try	{
+            Scanner file = new Scanner(new File(fileName));
+            //add code here to read from the file
+            //and add Parts to the map
+            while(file.hasNextLine()){
+                Part p = new Part(file.nextLine());
+                if(partsMap.containsKey(p)){
+                    partsMap.put(p, partsMap.get(p) + 1);
+                }
+                else{
+                    partsMap.put(p, 1);
+                }
+
+            }
+
+        }
+        catch( IOException e ) { //Most specific exceptions must be listed 1st
+            System.out.println(e);
+        }
+        catch( RuntimeException e )	{
+            System.out.println(e);
+        }
+        catch( Exception e ) {
+            System.out.println(e);
+        }
+        finally	{
+            //no code needed here
+        }
+    }
+
+    public String toString() {
+        String output="";
+
+        Set t = partsMap.keySet();
+        for(Object pee: t){
+            output += pee + " - " + partsMap.get(pee) + "\n";
+        }
+
+        return output;
+    }
+}
