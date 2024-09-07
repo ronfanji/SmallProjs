@@ -1,0 +1,62 @@
+import java.util.*;
+
+public class Anagram {
+
+    static int size;
+    static int count = 0;
+    static String[] arr;
+    static HashSet<String> set;
+
+    public static void main(String[] args) {
+        System.out.print("Word to anagram: ");
+        String input = (new Scanner(System.in)).nextLine();
+        size = input.length();
+        arr = input.split("");
+        set = new HashSet<>();
+        doAnagram(size);
+    }
+
+    public static void doAnagram(int newSize){
+        //TODO recursive method
+        if(newSize == 1){
+            displayWord();
+        }
+        else{
+           for(int j = 0; j<newSize-1; j++){
+               String temp = arr[newSize-1];
+               arr[newSize-1] = arr[j];
+               arr[j] = temp;
+
+               doAnagram(newSize-1);
+
+               String temp2 = arr[newSize-1];
+               arr[newSize-1] = arr[j];
+               arr[j] = temp2;
+           }
+           doAnagram(newSize-1);
+        }
+
+    }
+
+
+    public static void displayWord(){
+
+        String s = "";
+        for(int j = 0; j<size; j++){
+            s += arr[j];
+        }
+        if(set.contains(s)){
+
+        }
+        else {
+            if(count < 99)	System.out.print(" ");
+            if(count < 9)	System.out.print(" ");
+            set.add(s);
+            System.out.print(++count + " ");
+            System.out.print(s);
+            System.out.print(" ");
+            if(count%6 == 0) System.out.println("");
+        }
+
+    }
+}
