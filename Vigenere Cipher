@@ -1,0 +1,82 @@
+import java.util.*;
+
+public class VigenereCipher {
+
+    public static void main(String[] args){
+
+        Scanner in = new Scanner(System.in);
+        System.out.println("State if you want encrypt(1) or decrypt(2): ");
+        int z = in.nextInt();
+        if(z == 1) {
+            in.nextLine();
+            System.out.print("Enter a phrase to encrypt (in all uppercase): ");
+            String s = in.nextLine();
+            System.out.print("Enter a keyword: ");
+            String x = in.nextLine();
+            System.out.println(encrypt(s, x));
+        }
+        else if(z == 2){
+            in.nextLine();
+            System.out.print("Enter a phrase to decrypt (in all uppercase): ");
+            String s = in.nextLine();
+            System.out.print("Enter a keyword: ");
+            String x = in.nextLine();
+            System.out.println(decrypt(s, x));
+        }
+
+    }
+    public static StringBuilder encrypt(String s, String key){ // adds shifting number
+
+        StringBuilder ret = new StringBuilder();
+        // add the first letter and second letter - 65 - 1
+        int i = 0; // keep track of key
+        for(int j = 0; j<s.length(); j++){
+            char c = s.charAt(j);
+            char v = key.charAt(i);
+            if(c >= 65 && c <= 90) {
+                if (c + (v - 65) > 90)
+                    ret.append((char) (c + v - 65 - 26));
+                else if (c + (v - 65) < 65)
+                    ret.append((char) (c + v - 65 + 26));
+                else
+                    ret.append((char) (c + v - 65));
+
+                i++;
+                if (i >= key.length()) i = 0;
+            }
+            else ret.append(c);
+        }
+
+
+        return ret;
+    }
+
+    public static StringBuilder decrypt(String s, String key){ // subtracts shifting number
+        StringBuilder ret = new StringBuilder();
+        // add the first letter and second letter - 65 - 1
+        int i = 0; // keep track of key
+        for(int j = 0; j<s.length(); j++){
+            char c = s.charAt(j);
+            char v = key.charAt(i);
+            if(c >= 65 && c <= 90) {
+                if (c - (v - 65) > 90){
+                    ret.append((char) (c - (v - 65) - 26));
+                }
+                else if (c - (v - 65) < 65){
+                    ret.append((char) (c - (v - 65) + 26));
+                }
+                else
+                    ret.append((char) (c - (v - 65)));
+
+                i++;
+                if (i >= key.length()) i = 0;
+            }
+            else ret.append(c);
+        }
+
+
+        return ret;
+    }
+
+
+}
