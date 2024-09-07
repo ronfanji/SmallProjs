@@ -1,0 +1,31 @@
+/*
+Start with a number n > 1. Find the number of steps it takes to reach one using the following process:
+If n is even, divide it by 2. If n is odd, multiply it by 3 and add 1.
+ */
+import java.util.*;
+
+public class CollatzConjecture {
+
+    public static void main(String[] args){
+
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        System.out.println(Collatz(n) + " steps");
+
+    }
+
+    public static int Collatz(int n){
+        int ret = 0;
+        while(n != 1){
+            System.out.print(n + " ");
+            if(n % 2 == 0)
+                n/=2;
+            else
+                n = n * 3 + 1;
+            ret ++;
+        }
+        System.out.println(n);
+        return ret;
+    }
+
+}
