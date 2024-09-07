@@ -1,0 +1,161 @@
+public class CircularList
+{
+    private ListNode head; // front of the LinkedList
+    private ListNode tail; // last node of the LinkedList
+    private int size; // size of the LinkedList
+
+    // constructs a new CircularList
+    public CircularList(int x, int y) {
+        head = new ListNode(x, null);
+        tail = new ListNode(y, null);
+        head.setNext(tail);
+        tail.setNext(head);
+        size = size();
+    }
+
+    // returns the size of the array
+    public int size()
+    {
+        ListNode temp = head;
+        if(head == null) return 0;
+        int size = 1;
+        while(temp != tail){
+            size++;
+            temp = temp.getNext();
+        }
+        return size;
+    }
+
+    // returns whether the list is empty
+    public boolean isEmpty()
+    {
+        if(size() == 0)
+            return true;
+        return false;
+    }
+
+    // returns the value of the first node
+    public Integer first()
+    {
+        return (int) head.getValue();
+    }
+
+    // returns the value of the last node
+    public Integer last()
+    {
+        return (int) tail.getValue();
+    }
+
+    // adds a node to the front of the list
+    public void addFirst(Integer value)
+    {
+        ListNode x = new ListNode(value, head);
+        head = x;
+        if(tail != null)
+            tail.setNext(head);
+        size = size();
+
+        /*if(head == null){
+            head = new ListNode(value, tail);
+        }
+        else {
+            head = new ListNode(value, head);
+            tail.setNext(head);
+        }*/
+    }
+
+    // adds a node to the end of the list
+    public void addLast(Integer value)
+    {
+        if(tail == null){
+            tail = new ListNode(value, head);
+        }
+        else {
+            ListNode temp = tail; //current tail
+            tail = new ListNode(value, head);
+            temp.setNext(tail);
+        }
+    }
+
+    // adds a node at the position pos
+    public void addAtPos(int pos, Integer value)
+    {
+        ListNode temp = head;
+        int ind = 0;
+        if(pos == 0){
+            addFirst(value);
+        }
+        while(pos > 0 && temp != tail){
+            if(ind + 1== pos){
+                temp.setNext(new ListNode(value, temp.getNext()));
+                break;
+            }
+            ind ++;
+            temp = temp.getNext();
+        }
+        if(pos == size - 1){
+            addLast(value);
+        }
+
+    }
+
+    // removes the first node and returns the value of the removed node or -1 if the list is empty
+    public Integer removeFirst() {
+        ListNode temp = head;
+        tail.setNext(head.getNext());
+        head = head.getNext();
+        return (int) temp.getValue();
+    }
+
+    // removes the node at position pos and returns the value of the removed node or -1 if pos is not a valid position
+    public Integer removeNode(int pos) {
+        ListNode temp = head;
+
+        if(pos >= size || pos < 0) return -1;
+        int ind = 0;
+        if(pos == 0){
+            removeFirst();
+        }
+        for(int j = 0; j <pos - 1; j++){
+            temp = temp.getNext();
+        }
+        int x = (int) temp.getNext().getValue();
+        temp.setNext(temp.getNext().getNext());
+
+        if(ind == size - 1) {
+            tail = temp;
+        }
+        return (int) x;
+    }
+
+    // finds and returns the position of find, or -1 if not found
+    public int findNode(Integer find) {
+        ListNode temp = head;
+        int ind = 0;
+
+        while(temp != tail){
+            if((Integer) temp.getValue() == find){
+                return ind;
+            }
+            ind ++;
+            temp = temp.getNext();
+        }
+
+        return -1;
+    }
+
+    // returns the list of values in the LinkedList
+    public String toString()
+    {
+        String output = "size = " + size() + " first = " + first()+ " last = " + last() + "\n";
+
+        ListNode temp = head;
+        while(temp != tail) {
+            output += (int) temp.getValue() + " ";
+            temp = temp.getNext();
+        }
+        output += temp.getValue() + " ";
+        return output;
+    }
+
+}
