@@ -1,0 +1,848 @@
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JFrame;
+
+public class orbit {
+
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                new CLayout();
+            }
+
+        });
+
+    }
+}
+
+class CLayout {
+    JFrame j1 = new JFrame();
+    JPanel cont = new JPanel();
+    JPanel title = new JPanel();
+    JPanel KeplerLaw1 = new JPanel();
+    JPanel KeplerLaw2 = new JPanel();
+    JPanel KeplerLaw3 = new JPanel();
+    JPanel quiz = new JPanel();
+    JButton b1 = new JButton("Onwards!");
+    JButton b2 = new JButton("To the Next Law!");
+    JButton b3 = new JButton("The Last Law");
+    JButton b4 = new JButton("Quiz Time");
+    JButton b5 = new JButton("Return to the Title.");
+    CardLayout cl = new CardLayout();
+
+
+    public CLayout() {
+
+        cont.setLayout(cl);
+
+        PanelTitle m1 = new PanelTitle();
+        m1.add(b1);
+
+        PanelKeplerLaw1 m2 = new PanelKeplerLaw1();
+        m2.add(b2);
+
+        PanelKeplerLaw2 m3 = new PanelKeplerLaw2();
+        m3.add(b3);
+
+        PanelKeplerLaw3 m4 = new PanelKeplerLaw3();
+        m4.add(b4);
+
+        PanelQuiz m5 = new PanelQuiz();
+        m5.add(b5);
+
+        cont.add(m1, "1");
+        cont.add(m2, "2");
+        cont.add(m3, "3");
+        cont.add(m4, "4");
+        cont.add(m5, "5");
+
+        cl.show(cont, "1");
+
+        b1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) cont.getLayout();
+                m1.requestFocusInWindow();
+                cl.next(cont);
+            }
+
+        });
+        b2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) cont.getLayout();
+                m1.requestFocusInWindow();
+                cl.next(cont);
+            }
+
+        });
+
+        b3.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) cont.getLayout();
+                m1.requestFocusInWindow();
+                cl.next(cont);
+            }
+
+        });
+
+        b4.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) cont.getLayout();
+                m1.requestFocusInWindow();
+                cl.next(cont);
+            }
+
+        });
+        b5.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) cont.getLayout();
+                m1.requestFocusInWindow();
+                cl.next(cont);
+            }
+
+        });
+
+        j1.add(cont);
+        j1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        j1.pack();
+        j1.setVisible(true);
+    }
+
+
+
+}
+
+// title has day/night cycle with sun and moon
+//title has day/night cycle with sun and moon
+class PanelTitle extends JPanel implements ActionListener, KeyListener {
+
+    private int x, y;
+    private int ox, oy;
+    private int rx, ry;
+    private int cx;
+    private BufferedImage poo;
+    boolean mouseDown;
+    private Timer time;
+    private int add, add2;
+    private int change;
+
+
+    PanelTitle(){
+        ox = 0;
+        oy = 0;
+        x = y = 600;
+        mouseDown = false;
+        setSize(2000, 1500);
+        setVisible(true);
+        time = new Timer(250, this);
+        time.start();
+        add = 150;
+        add2 = 200;
+        change = 1;
+        addKeyListener(this);
+        setFocusable(true);
+    }
+
+    public void paintComponent(Graphics g) {
+
+        switch (change){
+            case 1:
+                g.setColor(Color.CYAN); break; // day time
+            case 2:
+                g.setColor(Color.BLACK); break; // night time
+        }
+        if(change == 1){
+            g.fillRect(0, 0, 2000, 1500);
+            g.setColor(Color.YELLOW);
+            g.fillOval(20+ox, 500 + oy, 100, 100);
+            g.setColor(Color.GREEN);
+            g.fillRect(0, 750, 2000, 1500);
+            g.setColor(Color.WHITE);
+            g.fillOval(cx-10, 300, 50, 50);
+            g.fillOval(cx+20, 310, 50, 50);
+            g.fillOval(cx+45, 300, 50, 50);
+            g.fillOval(cx+33, 275, 50, 50);
+            g.fillOval(cx+10, 275, 50, 50);
+
+            g.fillOval(cx-10+300, 320, 60, 60);
+            g.fillOval(cx+20+300, 330, 60, 60);
+            g.fillOval(cx+45+300, 320, 60, 60);
+            g.fillOval(cx+33+300, 295, 60, 60);
+            g.fillOval(cx+10+300, 295, 60, 60);
+
+            g.fillOval(cx-10+600, 100, 50, 50);
+            g.fillOval(cx+20+600, 110, 50, 50);
+            g.fillOval(cx+45+600, 100, 50, 50);
+            g.fillOval(cx+33+600, 75, 50, 50);
+            g.fillOval(cx+10+600, 75, 50, 50);
+
+            g.fillOval(cx-10+1000, 180, 80, 80);
+            g.fillOval(cx+20+1000, 190, 80, 80);
+            g.fillOval(cx+45+1000, 180, 80, 80);
+            g.fillOval(cx+33+1000, 155, 80, 80);
+            g.fillOval(cx+10+1000, 155, 80, 80);
+
+            g.fillOval(cx-25-400, 100, 100, 100);
+            g.fillOval(cx+40-400, 110, 100, 100);
+            g.fillOval(cx+90-400, 100, 100, 100);
+            g.fillOval(cx+65-400, 75, 100, 100);
+            g.fillOval(cx+13-400, 75, 100, 100);
+
+            g.fillOval(cx-120-1500, 180, 150, 150);
+            g.fillOval(cx+60-1500, 190, 150, 150);
+            g.fillOval(cx+90-1500, 180, 150, 150);
+            g.fillOval(cx+105-1500, 155, 150, 150);
+            g.fillOval(cx-30-1500, 155, 150, 150);
+
+            //tree
+            Color newColor = new Color(205, 127, 50);
+            g.setColor(newColor);
+            g.fillRect(1500, 650, 100, 300);
+            g.setColor(Color.GREEN);
+            g.fillOval(1400, 550, 300, 100);
+            g.fillOval(1450, 460, 200, 100);
+            g.fillOval(1500, 380, 100, 100);
+
+
+            g.setColor(Color.BLACK);
+
+        }
+        else if(change == 2){
+            g.fillRect(0, 0, 2000, 1500);
+            g.setColor(Color.WHITE);
+            g.fillOval(20+ox, 500 + oy, 50, 50);
+            g.fillOval(1000, 200, 7, 7);
+            g.fillOval(20, 250, 7, 7);
+            g.fillOval(1500, 100, 7, 7);
+            g.fillOval(150, 450, 15, 15);
+            g.fillOval(1750, 500, 7, 7);
+            g.fillOval(1800, 250, 7, 7);
+            g.fillOval(1980, 180, 7, 7);
+            g.fillOval(885, 309, 20, 20);
+            g.fillOval(1000, 643, 7, 7);
+            g.fillOval(642, 200, 7, 7);
+            g.fillOval(2321, 642, 7, 7);
+
+
+            g.setColor(new Color(1, 50, 32));
+            g.fillRect(0, 750, 2000, 1500);
+
+            Color newColor = new Color(66, 33, 33);
+            g.setColor(newColor);
+            g.fillRect(1500, 650, 100, 300);
+            g.setColor(new Color(1, 50, 32));
+            g.fillOval(1400, 550, 300, 100);
+            g.fillOval(1450, 460, 200, 100);
+            g.fillOval(1500, 380, 100, 100);
+
+            g.setColor(Color.WHITE);
+        }
+
+        g.setFont(new Font ("PortagoITC TT", Font.BOLD, 20));
+        g.drawString("Press 1 to change to day, 2 to change to night.", 100, 600);
+        g.setFont(new Font ("PortagoITC TT", Font.BOLD, 40));
+        g.drawString("Kepler's Laws", 850, 500);
+        g.drawString("By: Ryan Ji and Dhruv Patel", 850, 530);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        ox += add2;
+
+        cx+=100;
+        if(cx >= 1900) {
+            cx = 25;
+        }
+
+        if(ox <= 1000) {
+            add -= 30;
+            oy -= add;
+        }
+        else if(ox <=2000){
+            add += 30;
+            oy += add;
+        }
+        else {
+            ox = 0;
+            oy = 0;
+            add = 150;
+            add2 = 200;
+        }
+
+        repaint();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // TODO Auto-generated method stub
+        int code = e.getKeyCode();
+
+        if(code == '1')
+            change = 1;
+        if(code == '2')
+            change = 2;
+
+        switch (code)
+        {
+            case '1': change = 1; break;
+            case '2': change = 2; break;
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+}
+
+
+class PanelKeplerLaw1 extends JPanel implements ActionListener, MouseListener {
+
+    private Timer time;
+    private int x,y;
+    private BufferedImage earth, sun;
+    private int add;
+    private int ox, oy;
+    private int ax, ay;
+
+    PanelKeplerLaw1(){
+
+        time = new Timer(15, this);
+        setSize(2000, 1500);
+        time.start();
+        x = y = 600;
+        add = 1;
+        addMouseListener(this);
+    }
+
+    public void paintComponent(Graphics g)
+    {
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,2000,1500);
+        drawOrb(g, x, y);
+        drawAsteroids(g, x, y);
+
+    }
+
+    public void drawAsteroids(Graphics g, int x, int y) {
+
+        g.setColor(Color.GRAY);
+        g.fillOval(200 + x, 300, 90, 60);
+        g.fillOval(600 + x, 900, 60, 90);
+        g.fillOval(580 + x, 460, 60, 90);
+        g.fillOval(50 + x, 750, 90, 60);
+
+        g.setColor(Color.DARK_GRAY);
+        g.fillOval(210 + x, 310, 35, 25);
+        g.fillOval(240 + x, 325, 35, 25);
+        g.fillOval(60 + x, 760, 35, 25);
+        g.fillOval(90 + x, 765, 35, 25);
+
+        g.fillOval(625 + x, 910, 25, 35);
+        g.fillOval(618 + x, 960, 15, 25);
+        g.fillOval(605 + x, 470, 25, 35);
+        g.fillOval(598 + x, 520, 15, 25);
+
+    }
+
+
+    public void drawOrb (Graphics g, int x, int y) {
+
+        g.setColor(Color.BLACK);
+
+
+        g.setColor(Color.WHITE); // make stars
+
+        // text
+        g.setFont(new Font ("Arial", Font.BOLD, 30));
+        g.drawString("Kepler's First Law States that the orbit of a planet around the sun is an ellipse with the sun located.", 50,70);
+        g.drawString("To Kepler, this supported his inverse square law of gravitation, and Newton established this proposition ", 50,150);
+        g.drawString("deriving an approximate measure for the force using small lines in terms of the radius.", 50,190);
+        g.drawString("X = " + ax + " Y = " + ay, 50, 730);
+
+        g.drawString("at one of the foci.", 50, 110);
+        g.drawString("Foci", 625, 570);
+        g.drawString("Foci", 1325, 570);
+
+
+        // ellipse
+        g.drawOval(450, 500, 1200, 275);
+
+        g.setColor(Color.BLUE);
+
+        // foci/focal points
+        g.fillOval(625, 570, 120, 120);
+        g.fillOval(1325, 570, 120, 120);
+
+    }
+    public void actionPerformed(ActionEvent e)
+    {
+
+        if (x >=1200)
+            x=1;
+        x+=add;
+        y+=add;
+        if(x==200 && y==200)
+            add*=-1;
+        if(x==10 && y==10)
+            add*=-1;
+
+        repaint();
+    }
+
+    public void mouseClicked(MouseEvent e){
+        // tracks mouse coordinate
+        ax = e.getX();
+        ay = e.getY();
+        System.out.println("X = " + ax + " Y = " + ay);
+    }
+
+    public void mousePressed(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+
+
+}
+
+
+class PanelKeplerLaw2 extends JPanel implements ActionListener, MouseListener {
+
+    private Timer time;
+    private int x, y, px, py;
+    private int add;
+    private int dx = 10, dy = 10;
+
+
+    PanelKeplerLaw2() {
+        time = new Timer(200, this);
+        x=y=0;
+        setSize(2000, 1500);
+        setVisible(true);
+        px = py = 100;
+        time.start();
+        add = 1;
+        addMouseListener(this);
+
+    }
+
+    public void paintComponent(Graphics g){
+
+        g.setColor(new Color(31, 40, 45));
+        g.fillRect(0,0,2000,1500);
+        drawOrb(g, x, y);
+
+    }
+
+    public void drawOrb(Graphics g, int x, int y){
+
+        g.setColor(Color.WHITE);
+        g.drawOval(450, 500, 1200, 500);
+        g.setColor(Color.YELLOW);
+        g.fillOval(700, 620, 225, 225);
+
+        g.setFont(new Font("Arial" ,Font.PLAIN, 30));
+        g.drawString("Kepler's second law states that a radius vector joining any planet to the sun sweeps out equal areas in equal lengths of time.", 50, 70);
+        g.drawString("Sun", 740, 620);
+        g.drawString("As a result, the time it takes for a planet or any celestial body orbiting the sun is the same from point A to B and point C to D", 50, 100);
+        g.drawString("Therefore it can be concluded that planets will move faster when they are closer to the sun compared to when they are further from it", 50, 130);
+        g.drawString("to ensure that equal areas are swept out in equal times.", 50, 160);
+
+        g.drawLine(602, 582, 800, 760);
+        g.drawLine(588, 910, 780, 760);
+        g.drawString("Area 1", 550, 760);
+        g.drawString("A", 620, 560);
+        g.drawString("B", 600, 950);
+
+        g.drawLine(800, 750, 1610, 658);
+        g.drawLine(800, 750, 1601, 847);
+        g.drawString("Area 2", 1000, 760);
+        g.drawString("C", 1620, 900);
+        g.drawString("D", 1620, 630);
+
+        g.drawString("Area 1 = Area 2", 50, 700);
+        g.drawString("X = " + dx + " Y = " + dy, 50, 730);
+
+
+    }
+    public void mouseClicked(MouseEvent e){
+        // tracks mouse coordinate
+        dx = e.getX();
+        dy = e.getY();
+        System.out.println("X = " + dx + " Y = " + dy);
+        repaint();
+    }
+
+    public void mousePressed(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+}
+
+
+
+
+class PanelKeplerLaw3 extends JPanel implements ActionListener, MouseListener {
+
+    private Timer time;
+    private int x1, y1;
+    private int x2, y2;
+    private int dx, dy;
+    private int rx, ry;
+    private double oTheta, oTheta2;
+    private int change = 1;
+
+    PanelKeplerLaw3(){
+        time = new Timer(20, this);
+        time.start();
+        setSize(2000, 1500);
+        x1 = 640;
+        y1 = 50;
+        x2 = 1100;
+        y2 = 500;
+        rx = 100;
+        ry = 300;
+        oTheta = 0;
+        oTheta2 = 0;
+        dx = 0;
+        dy = 0;
+        addMouseListener(this);
+        setFocusable(true);
+    }
+
+    public void paintComponent(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0,  0, 2000, 1500);
+        drawOrb(g);
+    }
+
+    public void drawOrb(Graphics g) {
+
+        g.setColor(Color.YELLOW);
+        g.fillOval(925, 450, 100, 100);
+
+        g.setColor(Color.WHITE);
+        g.drawOval(825, 350, 300, 300);
+        g.drawOval(675, 215, 600, 600);
+        g.drawLine(975, 500, 960+x1, 510+y1);
+        g.drawLine(975, 500, 955+x2, 490+y2);
+        g.setFont(new Font("Comic Sans MS" ,Font.PLAIN, 30));
+        g.drawString("Kepler's Third Law States a Planet's orbital period squared is proportional ", 50, 70);
+        g.drawString("to its average distance from the sun cubed." , 50, 100);
+        g.setFont(new Font("Zapf Dingbats", Font.BOLD, 20));
+        g.drawString("R1", (975+950+x1)/2, (500+510+y1)/2);
+        g.drawString("R2", (975+955+x2)/2, (500+490+y2)/2);
+        g.drawString("T1", 1290, 500);
+        g.drawString("T2", 1140, 500);
+
+        g.setColor(Color.RED);
+        g.fillOval(940+x1, 475+y1, 75, 75);
+
+        g.setColor(Color.BLUE);
+        g.fillOval(950+x2, 475+y2, 50, 50);
+
+        g.setColor(Color.WHITE);
+        g.fillRect(rx, ry+400, 500, 200);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 35));
+        g.drawString("Click to See Formula!", rx+50, ry+450);
+
+        g.setColor(Color.WHITE);
+
+        if(change == 2) {
+            g.setFont(new Font("Comic Sans MS" ,Font.PLAIN, 40));
+            g.drawString("T2           R2", 200, 800);
+            g.drawString("T1            R1", 200, 850);
+            g.drawString("2", 290, 790);
+            g.drawString("3", 470, 790);
+            g.setFont(new Font("Comic Sans MS" ,Font.PLAIN, 50));
+            g.drawString("=", 310, 825);
+            g.drawLine(195, 810, 265, 810);
+            g.drawLine(370, 810, 440, 810);
+            g.setFont(new Font("Comic Sans MS" ,Font.PLAIN, 100));
+            g.drawString("(  )", 160, 840);
+            g.drawString("(  )", 340, 840);
+        }
+
+
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        int R = 300;
+        oTheta += 0.01;
+
+        x1 = (int) ((int) R * Math.cos(oTheta) + 0);
+        y1 = (int) ((int) R * Math.sin(oTheta) + 0);
+        revalidate();
+        repaint();
+
+        int R2 = 150;
+        oTheta2 += 0.03;
+
+        x2 = (int) ((int) R2 * Math.cos(oTheta2) + 0);
+        y2 = (int) ((int) R2 * Math.sin(oTheta2) + 0);
+        revalidate();
+        repaint();
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        dx = e.getX();
+        dy = e.getY();
+
+        if(dx >= 100 && dx <= 600 && dy >= 700 && dy <= 9000) {
+            change = 2;
+            rx = -1203123;
+            ry = 23930;
+        }
+
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+}
+
+class PanelQuiz extends JPanel implements KeyListener, MouseListener{
+
+    private int dx, dy;
+    private int change;
+    private int r;
+    private int cx, cy;
+    private int lx1, ly1;
+    private int lx2, ly2;
+    private boolean t;
+    private char code;
+
+    PanelQuiz(){
+        setSize(2000, 1500);
+        change = 0;
+        setSize(2000, 1500);
+        setVisible(true);
+        addMouseListener(this);
+        addKeyListener(this);
+        setFocusable(true);
+        t = false;
+        cx = cy = 0;
+        r = 0;
+        lx1 = ly1 = 0;
+        lx2 = ly2 = 0;
+        code = ' ';
+    }
+
+    public void paintComponent(Graphics g) {
+
+        g.setColor(Color.BLACK);
+        g.fillRect(0,  0, 2000, 1500);
+        drawOrb(g);
+    }
+
+    public void drawOrb(Graphics g) {
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("A planet with no axial tilt is located in another solar system.", 50, 100);
+        g.drawString("It circles its sun in a very elliptical orbit so that the temperature varies greatly throughout the year.", 50, 130);
+        g.drawString("If the year there has 612 days and the inhabitants celebrate", 50, 160);
+        g.drawString("the coldest day on day 1 of their calendar, when is the warmest day?", 50, 190);
+        g.drawString("To choose your answer, please type it's corresponding letter.", 50, 220);
+        g.drawString("Also, please draw the corresponding location of the circle on the ellipse.", 50, 250);
+        g.drawString("Press v to draw a line, press h to draw a circle", 50, 280);
+
+        if(lx1!=0 && ly1!=0 && lx2!=0 && ly2!=0) {
+            g.setColor(Color.WHITE);
+            g.drawLine(lx1, ly1, lx2, ly2);
+        }
+        if(cx != 0 && cy != 0 && r != 0) {
+            g.setColor(Color.BLUE);
+            g.fillOval(cx, cy, r, r);
+        }
+
+        if(change == 1) {
+            g.setColor(Color.RED);
+            g.fillRect(40, 480, 200, 30);
+        }
+        else if(change == 2) {
+            g.setColor(Color.RED);
+            g.fillRect(40, 520, 200, 30);
+        }
+        else if(change == 3) {
+            g.setColor(Color.GREEN);
+            g.fillRect(40, 560, 200, 30);
+        }
+        else if(change == 4){
+            g.setColor(Color.RED);
+            g.fillRect(40, 600, 200, 30);
+        }
+        g.setColor(Color.WHITE);
+        g.drawString("a. Day 1", 50,  500);
+        g.drawString("b. Day 153", 50, 540);
+        g.drawString("c. Day 306", 50, 580);
+        g.drawString("d. Day 459", 50, 620);
+        g.drawRect(1250, 100, 150, 60);
+        g.drawOval(675, 350, 800, 300);
+        g.drawString("Current: "  + code, 1250, 800);
+
+        g.setColor(Color.YELLOW);
+        g.fillOval(800, 420, 150, 150);
+
+        g.setColor(Color.BLACK);
+        g.drawString("Reset Quiz", 1270, 130);
+
+        repaint();
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        dx = e.getX();
+        dy = e.getY();
+        if(dx >= 1250 && dx <= 1400 && dy >= 100 && dy <= 160) {
+            change = 0;
+            lx1 = 0;
+            ly1 = 0;
+            lx2 = 0;
+            ly2 = 0;
+            r = 0;
+            cx = 0;
+            cy = 0;
+        }
+        if(code == 'v') {
+            lx1 = dx;
+            ly1 = dy;
+        }
+        if(code == 'h') {
+            cx = dx;
+            cy = dy;
+        }
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        dx = e.getX();
+        dy = e.getY();
+        if(code == 'v') {
+            lx2 = dx;
+            ly2 = dy;
+        }
+        if(code == 'h') {
+            r = (int) Math.sqrt((dx-cx) * (dx-cx) + (dy-cy) * (dy-cy));
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // TODO Auto-generated method stub
+        code = e.getKeyChar();
+
+        if(code == 'a' || code == 'A') change = 1;
+        else if(code == 'b' || code == 'B') change = 2;
+        else if(code == 'c' || code == 'C') change = 3;
+        else if(code == 'd' || code == 'D') change = 4;
+
+
+
+        System.out.print(code);
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+
+
+}
+
+
+
+
