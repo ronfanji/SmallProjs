@@ -1,0 +1,16 @@
+import java.util.*;
+
+public class MazeRunner {
+    public static void main(String args[]) {
+
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter random starting seed  ===>>  ");
+        int seed = input.nextInt();
+
+        Maze maze = new Maze(seed);
+        maze.displayMaze();
+        maze.solveMaze();
+        maze.displayMaze();
+        maze.mazeSolution();
+    }
+}
