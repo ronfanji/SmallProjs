@@ -1,0 +1,38 @@
+import java.util.*;
+import java.io.*;
+public class CreditCardValidMain {
+
+    public static void main(String[] args) throws IOException{
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter your credit card information ;) ");
+        String s = in.nextLine();
+        System.out.println(val(s)); // 4417 1234 5678 9113
+    }
+
+    public static boolean val(String num){
+
+        int sum = 0;
+        for(int j = 0; j<num.length(); j++)
+            if(num.charAt(j) == ' ')
+                num = num.substring(0, j) + num.substring(j+1);
+
+
+        for(int j = 0; j<num.length(); j++){
+            String s = num.substring(j, j+1);
+            int x = j%2 == 0 ? 2 * Integer.parseInt(s): Integer.parseInt(s);
+            if(x >= 10) {
+                int n = 0;
+                while(x > 0){
+                    n += x%10;
+                    x/=10;
+                }
+                x = n;
+            }
+            sum += x;
+        }
+
+        if(sum % 10 == 0) return true;
+        return false;
+    }
+
+}
