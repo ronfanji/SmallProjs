@@ -1,0 +1,142 @@
+public class DoublyLinkedList {
+    private ListNode head;
+    private ListNode tail;
+
+    //create constructors as needed
+    public DoublyLinkedList(){
+        head = null;
+        tail = null;
+    }
+
+    public void add(Comparable value) {
+        // Implementation for adding at the end
+        if(tail == null && head == null){
+            head = new ListNode(value, null,null);
+        }
+        else if(tail == null){
+            tail = new ListNode(value, head,null);
+            head.setNext(tail);
+        }
+        else if(head == null){
+            head = tail;
+            tail = new ListNode(value, head,null);
+            head.setNext(tail);
+        }
+        else {
+            ListNode temp = tail;
+            tail = new ListNode(value, temp, null);
+            temp.setNext(tail);
+        }
+    }
+
+    public void addFirst(Comparable value) {
+        // Implementation for adding at the beginning
+        if(head == null && tail == null){
+            tail = head;
+            head = new ListNode(value, null, tail);
+        }
+        else if(tail == null){
+            tail = head;
+            head = new ListNode(value, null, tail);
+            tail.setPrev(head);
+        }
+        else {
+            ListNode temp = head;
+            head = new ListNode(value, null, temp);
+            temp.setPrev(head);
+        }
+    }
+
+    public void addAfter(ListNode node, Comparable value) {
+        // Implementation for adding after a specific node
+        ListNode temp = head;
+        boolean did = true;
+        while(temp != null){
+            if(temp == node){
+                ListNode x = new ListNode(value,temp, temp.getNext());
+                temp.setNext(x);
+                temp.getNext().getNext().setPrev(x);
+
+                did = false;
+                break;
+            }
+            temp = temp.getNext();
+        }
+
+        if(did){
+            add(value);
+        }
+
+    }
+
+    public void remove(Comparable value) {
+        // Implementation for deleting a specific node by value
+        if(head.getValue() == value){
+            head = head.getNext();
+            head.setPrev(null);
+        }
+
+        ListNode temp = head;
+        ListNode prev = null;
+        while(temp != null){
+            if(temp.getValue() == value){
+                prev.setNext(temp.getNext());
+                temp.getNext().setPrev(prev);
+                break;
+            }
+            prev = temp;
+            temp = temp.getNext();
+        }
+
+    }
+
+    public ListNode search(Comparable value) {
+        // Implementation for searching for a specific node
+        ListNode temp = head;
+        while(temp != null){
+            if(temp.getValue() == value){
+                return temp;
+            }
+            temp = temp.getNext();
+        }
+        return null;
+    }
+
+    public void traverse() {
+        // Implementation for forward traversal
+        // Print list formatted as: a -> b -> c -> d
+        String ret = "";
+        ListNode temp = head;
+        while(temp != null){
+            ret += temp.getValue() + " -> ";
+            temp = temp.getNext();
+        }
+        ret = ret.substring(0, ret.length() - 4);
+        System.out.println(ret);
+    }
+
+    public void reverseTraverse() {
+        // Implementation for reverse traversal
+        // Print list formatted as: d -> c -> b -> a
+        String ret = "";
+        ListNode temp = tail;
+        while(temp != null){
+            ret += temp.getValue() + " -> ";
+            temp = temp.getPrev();
+        }
+        ret = ret.substring(0, ret.length()-4);
+        System.out.println(ret);
+    }
+
+    public String toString(){
+        // Print list formatted as: a <-> b <-> c <-> d
+        String ret = "";
+        ListNode temp = head;
+        while(temp != null){
+            ret += temp.getValue() + " <-> ";
+            temp = temp.getNext();
+        }
+        ret = ret.substring(0, ret.length() - 5);
+        return ret;
+    }
+}
